@@ -21,7 +21,7 @@ THRESHOLD_X = 100  # Horizontal movement threshold
 THRESHOLD_Y = 100  # Vertical movement threshold
 
 # Initialize drone's state (takeoff or not)
-#tello.takeoff()
+tello.takeoff()
 time.sleep(2)  # Give it time to stabilize
 
 while True:
@@ -54,19 +54,24 @@ while True:
             # Control the Tello drone based on finger position
             # Move left or right
             if cx < w // 2 - THRESHOLD_X:
-                tello.move_left(20)
+                #tello.move_left(20)
+                pass
             elif cx > w // 2 + THRESHOLD_X:
-                tello.move_right(20)
+                #tello.move_right(20)
+                pass
 
             # Move up or down
             if cy < h // 2 - THRESHOLD_Y:
                 tello.move_up(20)
+                #pass
             elif cy > h // 2 + THRESHOLD_Y:
                 tello.move_down(20)
+                #pass
 
             # Move forward or backward
             if abs(cx - w // 2) < THRESHOLD_X and abs(cy - h // 2) < THRESHOLD_Y:
-                tello.move_forward(20)
+                #tello.move_forward(20)
+                pass
 
     # Display the image with tracking
     cv2.imshow("Tello Finger Tracking", img)
@@ -76,5 +81,5 @@ while True:
         break
 
 # Land the drone and release resources
-#tello.land()
+tello.land()
 cv2.destroyAllWindows()

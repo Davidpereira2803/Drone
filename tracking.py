@@ -28,13 +28,19 @@ while True:
 
             # Get landmark positions for the index finger (landmark 8)
             index_finger_tip = hand_landmarks.landmark[8]
+            thumb_finger_tip = hand_landmarks.landmark[4]
 
             # Convert normalized coordinates to pixel coordinates
             h, w, c = img.shape
             cx, cy = int(index_finger_tip.x * w), int(index_finger_tip.y * h)
 
+            tx, ty = int(thumb_finger_tip.x * w), int(thumb_finger_tip.y * h)
+
             # Draw a circle at the index finger tip
             cv2.circle(img, (cx, cy), 10, (0, 255, 0), cv2.FILLED)
+            
+            cv2.circle(img, (tx, ty), 10, (0, 255, 0), cv2.FILLED)
+
 
             # Print finger tip coordinates (optional)
             print(f"Index Finger Tip coordinates: {cx}, {cy}")
