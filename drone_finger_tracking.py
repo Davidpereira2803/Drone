@@ -21,7 +21,7 @@ THRESHOLD_X = 100  # Horizontal movement threshold
 THRESHOLD_Y = 100  # Vertical movement threshold
 
 # Initialize drone's state (takeoff or not)
-tello.takeoff()
+#tello.takeoff()
 time.sleep(2)  # Give it time to stabilize
 
 while True:
@@ -81,5 +81,5 @@ while True:
         break
 
 # Land the drone and release resources
-tello.land()
+#ltello.land()
 cv2.destroyAllWindows()
