@@ -25,3 +25,11 @@ while True:
 # Release the resources
 tello.streamoff()
 cv2.destroyAllWindows()
+
+
+'''
+
+face_classifier = cv2.CascadeClassifier(r'/home/david/Projects/facialemotionrecognizerinrealtime/haarcascade_frontalface_default.xml')
+classifier =load_model(r'/home/david/Projects/facialemotionrecognizerinrealtime/model.h5')
+
+'''
