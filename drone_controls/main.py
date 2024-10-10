@@ -11,8 +11,8 @@ from djitellopy import Tello
 from drone_video import *
 import csv
 
-face_classifier = cv2.CascadeClassifier(r'/home/david/Projects/Drone/facialemotionrecognizerinrealtime/haarcascade_frontalface_default.xml')
-classifier =load_model(r'/home/david/Projects/Drone/facialemotionrecognizerinrealtime/model.h5')
+face_classifier = cv2.CascadeClassifier(r'/home/david/Projects/Drone/drone_controls/haarcascade_frontalface_default.xml')
+classifier =load_model(r'/home/david/Projects/Drone/drone_controls/model.h5')
 
 emotion_labels = ['Angry','Disgust','Fear','Happy','Neutral', 'Sad', 'Surprise']
 
@@ -62,23 +62,19 @@ def start_emotion_cv2():
     cv2.destroyAllWindows()
 
 def append_to_csv(filename, input_string):
-    """
-    Appends a string to a new row in a CSV file.
-
-    :param filename: The name of the CSV file to append to.
-    :param input_string: A string to be written as a single row.
-    """
     try:
-        # Open the file in append mode
         with open(filename, mode='a', newline='') as file:
             writer = csv.writer(file)
             
-            # Write the input string as a single row in the CSV file
             writer.writerow([input_string])
 
         print(f"'{input_string}' successfully added to {filename}")
     except Exception as e:
         print(f"An error occurred while writing to the file: {e}")
+
+
+
+
 
 if __name__ == "__main__":
     main()
