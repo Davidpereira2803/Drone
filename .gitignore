@@ -1,3 +1,7 @@
 /.venv
 
 /face-emotion-recognition
+
+/acialemotionrecognizerinrealtime
+
+/__pycache__
