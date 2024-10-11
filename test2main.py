@@ -12,6 +12,7 @@ from djitellopy import Tello
 import csv
 from drone_controls.drone_controller import DroneController
 from drone_controls.camera_handler import CameraHandler
+from drone_controls.emotion_reactions import EmotionReactions
 from collections import deque, Counter
 
 
@@ -22,8 +23,11 @@ emotion_labels = ['Angry','Disgust','Fear','Happy','Neutral', 'Sad', 'Surprise']
 
 drone = DroneController()
 camera = CameraHandler(drone.tello)
+reactions = EmotionReactions(drone.tello)
 
 last_30_strings = deque(maxlen=30)
+
+most_common_label = None
 
 def main():
     print("To start the video feed from the drone press 1.")
@@ -39,6 +43,8 @@ def main():
 
 def start_emotion_cv2():
     last_emotion_time = time.time()
+
+    most_common_label = None
 
     while True:
         frame = camera.capture_frame()
@@ -65,8 +71,7 @@ def start_emotion_cv2():
                 # Add the label to the deque for long-term analysis
                 labels_in_frame.append(label)
 
-        # Continuously show the video feed with detected emotions
-        cv2.imshow('Emotion Detector', frame)
+
 
         # Every 5 seconds, update the deque and print the most common emotion
         if time.time() - last_emotion_time >= 5 and labels_in_frame:
@@ -74,9 +79,17 @@ def start_emotion_cv2():
                 update_and_get_most_frequent(label)
             most_common_label = update_and_get_most_frequent(None)
             print(f"Most common emotion in last 30 frames: {most_common_label}")
-            
+            #reactions.react_to_emotion(most_common_label)
             # Reset the timer for the next check
             last_emotion_time = time.time()
+
+        if most_common_label is not None:
+            cv2.putText(frame, most_common_label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255) , 1)
+        else:
+            cv2.putText(frame, "", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255) , 1)
+        
+        # Continuously show the video feed with detected emotions
+        cv2.imshow('Emotion Detector', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
