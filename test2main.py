@@ -25,7 +25,7 @@ drone = DroneController()
 camera = CameraHandler(drone.tello)
 reactions = EmotionReactions(drone.tello)
 
-last_30_strings = deque(maxlen=30)
+last_30_strings = deque(maxlen=10)
 
 most_common_label = None
 
@@ -71,15 +71,13 @@ def start_emotion_cv2():
                 # Add the label to the deque for long-term analysis
                 labels_in_frame.append(label)
 
-
-
         # Every 5 seconds, update the deque and print the most common emotion
-        if time.time() - last_emotion_time >= 5 and labels_in_frame:
+        if time.time() - last_emotion_time >= 3 and labels_in_frame:
             for label in labels_in_frame:
-                update_and_get_most_frequent(label)
-            most_common_label = update_and_get_most_frequent(None)
+                update(label)
+            most_common_label = get_most_frequent()
             print(f"Most common emotion in last 30 frames: {most_common_label}")
-            #reactions.react_to_emotion(most_common_label)
+            reactions.react_to_emotion(most_common_label)
             # Reset the timer for the next check
             last_emotion_time = time.time()
 
@@ -97,26 +95,21 @@ def start_emotion_cv2():
     camera.stop_stream()
     cv2.destroyAllWindows()
 
-def append_to_csv(filename, input_string, num1, num2):
-    try:
-        with open(filename, mode='a', newline='') as file:
-            writer = csv.writer(file)
-            
-            writer.writerow([input_string, num1, num2])
-
-        print(f"Row '{input_string}, {num1}, {num2}' successfully added to {filename}")
-    except Exception as e:
-        print(f"An error occurred while writing to the file: {e}")
-
-def update_and_get_most_frequent(new_string):
+def update(new_string):
     last_30_strings.append(new_string)
-    
-    frequency = Counter(last_30_strings)
-    
-    most_frequent_string, _ = frequency.most_common(1)[0]
-    
-    return most_frequent_string
+    if len(last_30_strings) > 6: # after put greater tham 7 with 15 frames
+        last_30_strings.popleft()
 
+    print(last_30_strings)
+
+def get_most_frequent():
+    frequency = Counter(last_30_strings)
+
+    if len(frequency) > 1:
+        most_frequent_string, _ = frequency.most_common(1)[0]
+        return most_frequent_string
+    else:
+        return None    
 
 if __name__ == "__main__":
     main()
