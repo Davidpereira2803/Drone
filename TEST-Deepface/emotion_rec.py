@@ -33,7 +33,12 @@ while True:
     
     # Detect emotions
     try:
+        # Use DeepFace to analyze the frame for emotions
         predictions = DeepFace.analyze(rgb_frame, actions=['emotion'], enforce_detection=False)
+        
+        # Check if predictions is a list (multiple faces detected)
+        if isinstance(predictions, list):
+            predictions = predictions[0]  # Take the first result
         
         # Extract the dominant emotion
         emotion = predictions['dominant_emotion']
