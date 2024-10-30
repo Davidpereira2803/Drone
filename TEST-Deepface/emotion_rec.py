@@ -4,6 +4,23 @@ from deepface import DeepFace
 cap = cv2.VideoCapture(0)
 frame_count = 0
 
+if not cap.isOpened():
+    print("Error: Could not open webcam.")
+    exit()
+
+# Define emotion colors for display
+emotion_colors = {
+    'happy': (0, 255, 0),
+    'sad': (255, 0, 0),
+    'neutral': (255, 255, 255),
+    'angry': (0, 0, 255),
+    'surprise': (0, 255, 255),
+    'fear': (128, 0, 128),
+    'disgust': (0, 128, 0)
+}
+
+print("Press 'q' to exit the program.")
+
 while True:
     ret, frame = cap.read()
     if not ret:
