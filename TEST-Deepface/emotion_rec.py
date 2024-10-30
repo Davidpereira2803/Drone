@@ -4,12 +4,6 @@ from deepface import DeepFace
 cap = cv2.VideoCapture(0)
 frame_count = 0
 
-import cv2
-from deepface import DeepFace
-
-cap = cv2.VideoCapture(0)
-frame_count = 0
-
 while True:
     ret, frame = cap.read()
     if not ret:
