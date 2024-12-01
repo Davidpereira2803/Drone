@@ -32,9 +32,9 @@ most_common_label = None
 
 
 def main():
-    drone.tello_takeoff()
-    sleep(2)
-    drone.tello_up(60)
+    #drone.tello_takeoff()
+    #sleep(2)
+    #drone.tello_up(60)
     print("To start the video feed from the drone press 1.")
     
 
@@ -105,7 +105,7 @@ def start_emotion_cv2():
             break
 
     camera.stop_stream()
-    drone.tello_land()
+    #drone.tello_land()
     cv2.destroyAllWindows()
 
 def update(new_string):
