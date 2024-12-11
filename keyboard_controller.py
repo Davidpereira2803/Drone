@@ -46,6 +46,11 @@ class Controller(Node):
         self.notperformed = True
         self.emotionactive = False
 
+        self.happyperforming = False
+        self.sadperforming = False
+        self.angryperforming = False
+        self.surprisedperforming = False
+
         # Happy
         self.happyperf = False
         self.happyclean = False
@@ -139,7 +144,7 @@ class Controller(Node):
             if self.emotionactive:
 
                 # Happy
-                if self.notperformed and (self.latest_emotion == "Happy"):
+                if self.happyperforming or (self.notperformed and (self.latest_emotion == "Happy")):
                     self.get_logger().info("Happy Front FLip!")
                     msg = FlipControl()
                     msg.flip_forward = False
@@ -149,6 +154,7 @@ class Controller(Node):
                     self._flip_control_pub.publish(msg)
                     self.notperformed = False
                     self.happyclean = True
+                    self.happyperforming = False
 
                     return
 
@@ -179,7 +185,7 @@ class Controller(Node):
                     self.get_logger().info("Happy Back Flip!")
 
                 # Angry
-                if self.notperformed and (self.latest_emotion == "Angry"):
+                if  self.angryperforming or (self.notperformed and (self.latest_emotion == "Angry")):
 
                     self.key_pressed["th"] = -self.speed
                     
@@ -187,6 +193,7 @@ class Controller(Node):
                     self.get_logger().info("Angry Movement 1!")
                     self.notperformed = False
                     self.angryclean = True
+                    self.angryperforming = False
 
                     return
 
@@ -222,7 +229,7 @@ class Controller(Node):
                 self.key_pressed["forward"] = 0.0
 
                 # Sad
-                if self.notperformed and (self.latest_emotion == "Sad"):
+                if self.sadperforming or (self.notperformed and (self.latest_emotion == "Sad")):
 
                     self.key_pressed["forward"] = -self.speed
                     
@@ -230,6 +237,7 @@ class Controller(Node):
                     self.get_logger().info("Sad Movement 1!")
                     self.notperformed = False
                     self.sadclean = True
+                    self.sadperforming = False
 
                     return
 
@@ -254,13 +262,14 @@ class Controller(Node):
                     self.sadperf = False
                 
                 # Surprised
-                if self.notperformed and (self.latest_emotion == "Surprise"):
+                if self.surprisedperforming or (self.notperformed and (self.latest_emotion == "Surprise")):
 
                     self.key_pressed["th"] = self.speed
 
                     self.get_logger().info("Surprised Movement 1!")
                     self.notperformed = False
                     self.surprisedclean = True
+                    self.surprisedperforming = False
 
                     return
 
@@ -312,9 +321,22 @@ class Controller(Node):
         print(f"pressing the key {key}")
         try:
             if key.char == "1":
+                self.happyperforming = True
+                self.emotionactive = True
+            if key.char == "2":
+                self.sadperforming = True
+                self.emotionactive = True
+            if key.char == "3":
+                self.angryperforming = True
+                self.emotionactive = True
+            if key.char == "4":
+                self.surprisedperforming = True
+                self.emotionactive = True
+
+            if key.char == "5":
                 self.emotionactive = True
                 self.notperformed = True
-            if key.char == "2":
+            if key.char == "6":
                 self.emotionactive = False
                 self.notperformed = False
 
@@ -434,19 +456,6 @@ class Controller(Node):
             self.shutdown = True
             return False
         try:
-            if key.char == "2":
-                self.key_pressed["th"] = 0.0
-            if key.char == "3":
-                msg = FlipControl()
-                msg.flip_forward = False
-                msg.flip_backward = False
-                msg.flip_left = False
-                msg.flip_right = False
-                msg.flip_forward_left = False
-                msg.flip_forward_right = False
-                msg.flip_back_left = False
-                msg.flip_back_right = False
-                self._flip_control_pub.publish(msg)
             if key.char == "w":
                 self.key_pressed["forward"] = 0.0
             if key.char == "s":
